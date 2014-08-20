@@ -9,7 +9,6 @@
 //
 
 #import "WeatherAnimationViewController.h"
-
 @interface WeatherAnimationViewController ()
 @property(nonatomic, strong) NSTimer *generator;
 @end
