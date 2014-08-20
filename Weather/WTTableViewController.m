@@ -226,6 +226,18 @@ static const NSString *baseURLString = @"http://www.raywenderlich.com/demos/weat
     
     cell.textLabel.text = [daysWeather weatherDescription];
     
+    NSURL *url = [NSURL URLWithString:daysWeather.weatherIconURL];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    UIImage *placeholderImage = [UIImage imageNamed:@"placeholder"];
+    
+    __weak UITableViewCell *weakCell = cell;
+    
+    [cell.imageView setImageWithURLRequest:request placeholderImage:placeholderImage
+                                   success:^(NSURLRequest *request, NSHTTPURLResponse *response, UIImage *image) {
+                                       weakCell.imageView.image = image;
+                                       [weakCell setNeedsDisplay];
+                                   } failure:nil];
+    
     return cell;
 }
 

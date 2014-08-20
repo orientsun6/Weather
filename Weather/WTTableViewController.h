@@ -9,6 +9,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIImageView+AFNetworking.h"
 
 @interface WTTableViewController : UITableViewController <NSXMLParserDelegate>
 
