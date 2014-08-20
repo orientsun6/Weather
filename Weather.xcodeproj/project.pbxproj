@@ -24,6 +24,7 @@
 		5DE2AEC119A3F2F100E74A40 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DE2AEAE19A3F2F100E74A40 /* UIProgressView+AFNetworking.m */; };
 		5DE2AEC219A3F2F100E74A40 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DE2AEB019A3F2F100E74A40 /* UIRefreshControl+AFNetworking.m */; };
 		5DE2AEC319A3F2F100E74A40 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DE2AEB219A3F2F100E74A40 /* UIWebView+AFNetworking.m */; };
+		843DD05919A54024003FFAAF /* WeatherHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 843DD05819A54024003FFAAF /* WeatherHTTPClient.m */; };
 		D233D07A16B400EF005212DE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = D233D07816B400EF005212DE /* InfoPlist.strings */; };
 		D233D07C16B400EF005212DE /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D233D07B16B400EF005212DE /* main.m */; };
 		D233D08016B400EF005212DE /* WTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D233D07F16B400EF005212DE /* WTAppDelegate.m */; };
@@ -79,6 +80,8 @@
 		5DE2AEB019A3F2F100E74A40 /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
 		5DE2AEB119A3F2F100E74A40 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		5DE2AEB219A3F2F100E74A40 /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
+		843DD05719A54024003FFAAF /* WeatherHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WeatherHTTPClient.h; sourceTree = "<group>"; };
+		843DD05819A54024003FFAAF /* WeatherHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WeatherHTTPClient.m; sourceTree = "<group>"; };
 		D233D06B16B400EF005212DE /* Weather.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Weather.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D233D07716B400EF005212DE /* Weather-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Weather-Info.plist"; sourceTree = "<group>"; };
 		D233D07916B400EF005212DE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -220,6 +223,8 @@
 				D233D07F16B400EF005212DE /* WTAppDelegate.m */,
 				D233D09216B4011B005212DE /* WTTableViewController.h */,
 				D233D09316B4011B005212DE /* WTTableViewController.m */,
+				843DD05719A54024003FFAAF /* WeatherHTTPClient.h */,
+				843DD05819A54024003FFAAF /* WeatherHTTPClient.m */,
 				D233D07616B400EF005212DE /* Supporting Files */,
 			);
 			path = Weather;
@@ -307,6 +312,7 @@
 				D233D08016B400EF005212DE /* WTAppDelegate.m in Sources */,
 				5DE2AEB619A3F2F100E74A40 /* AFNetworkReachabilityManager.m in Sources */,
 				5DE2AEBC19A3F2F100E74A40 /* AFNetworkActivityIndicatorManager.m in Sources */,
+				843DD05919A54024003FFAAF /* WeatherHTTPClient.m in Sources */,
 				D233D09416B4011B005212DE /* WTTableViewController.m in Sources */,
 				5DE2AEB819A3F2F100E74A40 /* AFURLConnectionOperation.m in Sources */,
 				5DE2AEC119A3F2F100E74A40 /* UIProgressView+AFNetworking.m in Sources */,

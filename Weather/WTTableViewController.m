@@ -13,7 +13,7 @@
 #import "NSDictionary+weather.h"
 #import "NSDictionary+weather_package.h"
 
-static const NSString *baseURLString = @"http://www.raywenderlich.com/demos/weather_sample/";
+static  NSString * const baseURLString = @"http://www.raywenderlich.com/demos/weather_sample/";
 
 @interface WTTableViewController ()
 @property(strong) NSDictionary *weather;
@@ -40,6 +40,9 @@ static const NSString *baseURLString = @"http://www.raywenderlich.com/demos/weat
 {
     [super viewDidLoad];
     self.navigationController.toolbarHidden = NO;
+    
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.delegate = self;
 
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -168,12 +171,15 @@ static const NSString *baseURLString = @"http://www.raywenderlich.com/demos/weat
 
 - (IBAction)clientTapped:(id)sender
 {
+    UIActionSheet *actionsheet = [[UIActionSheet alloc] initWithTitle:@"AFHTTPSessionManager" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"HTTP GET", @"HTTP POST", nil];
+    
+    [actionsheet showFromBarButtonItem:sender animated:YES];
     
 }
 
 - (IBAction)apiTapped:(id)sender
 {
-    
+    [self.locationManager startUpdatingLocation];
 }
 
 #pragma mark - Table view data source
@@ -309,6 +315,75 @@ static const NSString *baseURLString = @"http://www.raywenderlich.com/demos/weat
     self.weather = @{@"data": self.xmlWeather};
     self.title = @"XML Retrieved";
     [self.tableView reloadData];
+}
+
+#pragma mark -- actionsheet delegate
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == [actionSheet cancelButtonIndex]) {
+        //user cancel
+        return;
+    }
+    
+    NSURL *baseURL = [NSURL URLWithString:(NSString *)baseURLString];
+    NSDictionary *parameters = @{@"format":@"json"};
+    
+    AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithBaseURL:baseURL];
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+        
+    if (buttonIndex == 0) {
+        [manager GET:@"weather.php" parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+            self.weather = responseObject;
+            self.title = @"HTTP GET";
+            [self.tableView reloadData];
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            UIAlertView *alertview = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alertview show];
+        }];
+    }
+    else if (buttonIndex == 1) {
+        [manager POST:@"weather.php" parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+            self.weather = responseObject;
+            self.title = @"HTTP POST";
+            [self.tableView reloadData];
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather" message:[error localizedDescription] delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alertView show];
+        }];
+    }
+}
+
+#pragma mark -- locationmanager delegate
+
+- (void) locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
+    CLLocation *newLocation = [locations lastObject];
+    
+    //location 5 mins old, ignore it
+    if ([newLocation.timestamp timeIntervalSinceNow] > 300) return;
+    
+    [self.locationManager stopUpdatingLocation];
+    
+    WeatherHTTPClient *client = [WeatherHTTPClient sharedWeatherHTTPClient];
+    client.delegate = self;
+    [client updateWeatherAtLocation:newLocation forNumberOfDays:5];
+}
+
+#pragma mark -- protocal weatherHTTPClient
+
+- (void)weatherHTTPClient:(WeatherHTTPClient *)client didUpdateWithWeather:(id)weather{
+    self.weather = weather;
+    self.title = @"API Updated";
+    [self.tableView reloadData];
+}
+
+
+- (void)weatherHTTPClient:(WeatherHTTPClient *)client didFailWithError:(NSError *)error{
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
+                                                        message:[error localizedDescription]
+                                                       delegate:self
+                                              cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alertView show];
+    
 }
 
 

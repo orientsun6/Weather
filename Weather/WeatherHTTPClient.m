@@ -1,0 +1,60 @@
+//
+//  WeatherHTTPClient.m
+//  Weather
+//
+//  Created by Charles Liu on 2014-08-20.
+//  Copyright (c) 2014 Scott Sherwood. All rights reserved.
+//
+
+#import "WeatherHTTPClient.h"
+static NSString * const worldWeatherOnlineAPIKey = @"6550ca4b182485566ba977f52024858035b8bcf8";
+static NSString * const WorldWeatherOnlineURLString = @"http://api.worldweatheronline.com/free/v1/";
+
+@implementation WeatherHTTPClient
+
++ (WeatherHTTPClient *)sharedWeatherHTTPClient {
+    static WeatherHTTPClient *_sharedWeatherHTTPClient = nil;
+    
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedWeatherHTTPClient = [[self alloc] initWithBaseURL:[NSURL URLWithString:WorldWeatherOnlineURLString]];
+    });
+    
+    return _sharedWeatherHTTPClient;
+}
+
+- (instancetype)initWithBaseURL:(NSURL *)url
+{
+    self = [super initWithBaseURL:url];
+    
+    if (self) {
+        self.requestSerializer = [AFJSONRequestSerializer serializer];
+        self.responseSerializer = [AFJSONResponseSerializer serializer];
+    }
+
+    return self;
+}
+
+- (void)updateWeatherAtLocation:(CLLocation *)location forNumberOfDays:(NSUInteger)number {
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    
+    parameters[@"num_of_days"] = @(number);
+    parameters[@"q"] = [NSString stringWithFormat:@"%f,%f", location.coordinate.latitude, location.coordinate.latitude];
+    parameters[@"format"] = @"json";
+    parameters[@"key"] = worldWeatherOnlineAPIKey;
+    
+    [self GET:@"weather.ashx" parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+        if ([self.delegate respondsToSelector:@selector(weatherHTTPClient:didUpdateWithWeather:)]) {
+            [self.delegate weatherHTTPClient:self didUpdateWithWeather:responseObject];
+        }
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if ([self.delegate respondsToSelector:@selector(weatherHTTPClient:didFailWithError:)]) {
+            [self.delegate weatherHTTPClient:self didUpdateWithWeather:error];
+        }
+    }];
+    
+}
+
+
+
+@end
